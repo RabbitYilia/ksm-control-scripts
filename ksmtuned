@@ -3,8 +3,10 @@
 # Copyright 2009 Red Hat, Inc. and/or its affiliates.
 # Released under the GPL
 #
-# ksmtune - a simple script that controls whether (and with what vigor) should
-# ksm search duplicated pages.
+# Author:      Dan Kenigsberg <danken@redhat.com>
+#
+# ksmtuned - a simple script that controls whether (and with what vigor) ksm
+# should search for duplicated pages.
 #
 # starts ksm when memory commited to qemu processes exceeds a threshold, and
 # make ksm work harder and harder untill memory load falls below that
