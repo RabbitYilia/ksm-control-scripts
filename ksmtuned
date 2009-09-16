@@ -14,8 +14,8 @@
 #
 # needs testing and ironing. contact danken@redhat.com if something breaks.
 
-if [ -f /etc/ksmd.conf ]; then
-    . /etc/ksmd.conf
+if [ -f /etc/ksmtuned.conf ]; then
+    . /etc/ksmtuned.conf
 fi
 
 KSM_MONITOR_INTERVAL=${KSM_MONITOR_INTERVAL:-60}
