@@ -43,6 +43,7 @@ start() {
     echo $KSM_MAX_KERNEL_PAGES > /sys/kernel/mm/ksm/max_kernel_pages
     echo 1 > /sys/kernel/mm/ksm/run
     RETVAL=$?
+    [ $RETVAL = 0 ] && success $"$prog startup" || failure $"$prog startup"
     echo
     return $RETVAL
 }
@@ -51,6 +52,7 @@ stop() {
     echo -n $"Stopping $prog: "
     echo 0 > /sys/kernel/mm/ksm/run
     RETVAL=$?
+    [ $RETVAL = 0 ] && success $"$prog shutdown" || failure $"$prog shutdown"
     echo
 }
 
