@@ -1,0 +1,82 @@
+#!/bin/bash
+#
+# Copyright 2009 Red Hat, Inc. and/or its affiliates.
+# Released under the GPL
+#
+# ksmtuned     Kernel Samepage Merging Tuning Daemon
+#
+# chkconfig: - 85 15
+# description: The Kernel Samepage Merging control Daemon is a simple script  \
+#	       that controls whether (and with what vigor) should ksm search  \
+#              duplicated pages.
+# processname: ksmd
+# config: /etc/ksmd.conf
+# pidfile: /var/run/ksmd.pid
+#
+### BEGIN INIT INFO
+# Provides: ksmd
+# Required-Start:
+# Required-Stop:
+# Should-Start:
+# Short-Description: tune the speed of ksm
+# Description: The Kernel Samepage Merging control Daemon is a simple script
+#   that controls whether (and with what vigor) should ksm search duplicated
+#   memory pages.
+#   needs testing and ironing. contact danken@redhat.com if something breaks.
+### END INIT INFO
+
+. /etc/rc.d/init.d/functions
+
+prog=ksmtune
+pidfile=${PIDFILE-/var/run/ksmtune.pid}
+RETVAL=0
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon --pidfile=${pidfile} $prog
+    RETVAL=$?
+    echo
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc -p ${pidfile}
+    RETVAL=$?
+    echo
+}
+
+signal () {
+    local pid
+    pid=`cat ${pidfile}`
+    RETVAL=$?
+    if [ $RETVAL -eq 0 ]; then
+        pkill -P $pid sleep
+        RETVAL=$?
+    fi
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+        status -p ${pidfile} $prog
+	RETVAL=$?
+	;;
+  restart)
+	stop
+	start
+	;;
+  signal)
+	signal
+	;;
+  *)
+	echo $"Usage: $prog {start|stop|restart|status|signal|help}"
+	RETVAL=3
+esac
+
+exit $RETVAL
