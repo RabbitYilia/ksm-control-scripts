@@ -1,0 +1,5 @@
+
+ - More docs in ksmtuned.conf
+
+ - ksmtuned needs to daemonize, currently "service ksmtuned start"
+   just hangs
