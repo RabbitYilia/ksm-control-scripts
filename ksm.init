@@ -76,9 +76,6 @@ case "$1" in
 	stop
 	start
 	;;
-  signal)
-	signal
-	;;
   *)
 	echo $"Usage: $prog {start|stop|restart|status|help}"
 	RETVAL=3
