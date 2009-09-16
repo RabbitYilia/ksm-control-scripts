@@ -69,7 +69,7 @@ free_memory () {
                 /proc/meminfo
 }
 
-increase_napges() {
+increase_npages() {
     local delta
     delta=${1:-0}
     npages=$[npages + delta]
@@ -94,10 +94,10 @@ adjust () {
     fi
     [ -n "$DEBUG" ] && echo "$[committed + thres] > $total, start ksm"
     if [ $free -lt $thres ]; then
-        npages=`increase_napges $KSM_NPAGES_BOOST`
+        npages=`increase_npages $KSM_NPAGES_BOOST`
         [ -n "$DEBUG" ] && echo "$free < $thres, boost"
     else
-        npages=`increase_napges $KSM_NPAGES_DECAY`
+        npages=`increase_npages $KSM_NPAGES_DECAY`
         [ -n "$DEBUG" ] && echo "$free > $thres, decay"
     fi
     KSMCTL start $npages $sleep
