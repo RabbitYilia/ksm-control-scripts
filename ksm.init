@@ -1,24 +1,23 @@
 #!/bin/bash
 #
+# ksm          Kernel Samepage Merging
+#
+# Author:      Dan Kenigsberg <danken@redhat.com>
+#
 # Copyright 2009 Red Hat, Inc. and/or its affiliates.
 # Released under the GPL
 #
-# ksmd         Kernel Samepage Merging control Daemon
-#
 # chkconfig: - 84 16
-# description: The Kernel Samepage Merging control Daemon is a simple script  \
-#	       that starts and stops ksm kernel thread.
-# processname: ksmd
+# description: The KSM init script starts and stops the ksm kernel thread.
 # config: /etc/sysconfig/ksm
 #
 ### BEGIN INIT INFO
-# Provides: ksmd
+# Provides: ksm
 # Required-Start:
 # Required-Stop:
 # Should-Start:
 # Short-Description: start and stop ksm
-# Description: The Kernel Samepage Merging control Daemon is a simple script
-#   that starts and stops ksm kernel thread.
+# Description: The KSM init script starts and stops the ksm kernel thread.
 ### END INIT INFO
 
 . /etc/rc.d/init.d/functions
