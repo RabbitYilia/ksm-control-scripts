@@ -66,10 +66,10 @@ case "$1" in
   status)
         is_run=`cat /sys/kernel/mm/ksm/run`
 	RETVAL=$?
-        if [ is_run -eq 1 ]; then
-            echo $"$prog running"
+        if [ $is_run -eq 1 ]; then
+            echo $"$prog is running"
         else
-            echo $"$prog not running"
+            echo $"$prog is not running"
         fi
 	;;
   restart)
