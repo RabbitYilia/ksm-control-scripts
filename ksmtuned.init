@@ -38,7 +38,7 @@ start() {
     daemon --pidfile=${pidfile} $ksmtuned
     RETVAL=$?
     echo
-    return $RETVAL
+    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog
 }
 
 stop() {
@@ -46,6 +46,16 @@ stop() {
     killproc -p ${pidfile}
     RETVAL=$?
     echo
+    [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$prog
+}
+
+restart() {
+    stop
+    start
+}
+
+condrestart() {
+    [ -e /var/lock/subsys/$prog ] && restart || :
 }
 
 case "$1" in
@@ -60,11 +70,13 @@ case "$1" in
 	RETVAL=$?
 	;;
   restart)
-	stop
-	start
+	restart
+	;;
+  condrestart)
+	condrestart
 	;;
   *)
-	echo $"Usage: $prog {start|stop|restart|status|help}"
+	echo $"Usage: $prog {start|stop|restart|condrestart|status|help}"
 	RETVAL=3
 esac
 
