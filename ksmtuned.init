@@ -28,13 +28,14 @@
 
 . /etc/rc.d/init.d/functions
 
-prog=ksmtune
+prog=ksmtuned
+ksmtuned=/usr/sbin/ksmtuned
 pidfile=${PIDFILE-/var/run/ksmtune.pid}
 RETVAL=0
 
 start() {
     echo -n $"Starting $prog: "
-    daemon --pidfile=${pidfile} $prog
+    daemon --pidfile=${pidfile} $ksmtuned
     RETVAL=$?
     echo
     return $RETVAL
