@@ -1,0 +1,86 @@
+#!/bin/bash
+#
+# Copyright 2009 Red Hat, Inc. and/or its affiliates.
+# Released under the GPL
+#
+# ksmd         Kernel Samepage Merging control Daemon
+#
+# chkconfig: - 84 16
+# description: The Kernel Samepage Merging control Daemon is a simple script  \
+#	       that starts and stops ksm kernel thread.
+# processname: ksmd
+# config: /etc/sysconfig/ksm
+#
+### BEGIN INIT INFO
+# Provides: ksmd
+# Required-Start:
+# Required-Stop:
+# Should-Start:
+# Short-Description: start and stop ksm
+# Description: The Kernel Samepage Merging control Daemon is a simple script
+#   that starts and stops ksm kernel thread.
+### END INIT INFO
+
+. /etc/rc.d/init.d/functions
+
+if [ -f /etc/sysconfig/ksm ]; then
+    . /etc/sysconfig/ksm
+fi
+
+prog=ksm
+RETVAL=0
+
+# unless KSM_MAX_KERNEL_PAGES is set, let ksm munch up to half of total memory.
+default_max_kernel_pages () {
+    local total pagesize
+    total=`awk '/^MemTotal:/ {print $2}' /proc/meminfo`
+    pagesize=`getconf PAGESIZE`
+    echo $[total * 1024 / pagesize / 2]
+}
+
+start() {
+    echo -n $"Starting $prog: "
+    KSM_MAX_KERNEL_PAGES=${KSM_MAX_KERNEL_PAGES:-`default_max_kernel_pages`}
+    echo $KSM_MAX_KERNEL_PAGES > /sys/kernel/mm/ksm/max_kernel_pages
+    echo 1 > /sys/kernel/mm/ksm/run
+    RETVAL=$?
+    echo
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    echo 0 > /sys/kernel/mm/ksm/run
+    RETVAL=$?
+    echo
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+        is_run=`cat /sys/kernel/mm/ksm/run`
+	RETVAL=$?
+        if [ is_run -eq 1 ]; then
+            echo $"$prog running"
+        else
+            echo $"$prog not running"
+        fi
+	;;
+  restart)
+	stop
+	start
+	;;
+  signal)
+	signal
+	;;
+  *)
+	echo $"Usage: $prog {start|stop|restart|status|help}"
+	RETVAL=3
+esac
+
+exit $RETVAL
